@@ -1,5 +1,5 @@
-from SimpleGame import SimpleGame
-from IterativeGame import IterativeGame
+from GameTheoryPy.SimpleGame import SimpleGame
+from GameTheoryPy.IterativeGame import IterativeGame
 import numpy as np
 
 def game1():
