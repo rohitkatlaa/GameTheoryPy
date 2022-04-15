@@ -89,12 +89,12 @@ def game4():
 def game5():
   """Prisoners' dilemma with high trust."""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Cooperate", "Defect"]
   payoff_function = {
-    (0, 0): [6,6],
-    (0, 1): [0,10],
-    (1, 0): [10,0],
-    (1, 1): [1,1]
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
   }
   belief_values = {
     "A": np.array([[0.8, 0.2]]),
