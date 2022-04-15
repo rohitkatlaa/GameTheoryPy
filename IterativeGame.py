@@ -92,7 +92,6 @@ class IterativeGame:
 
       new_belief_values[player] = beliefs    
     return new_belief_values
-    # return belief_values
 
   def print_game(self, iter, iter_strategy):
     iter_payoff = self.payoff_function[iter_strategy]
@@ -100,10 +99,11 @@ class IterativeGame:
     print("Iteration {}:".format(iter))
     print("Actions of players: {}".format(iter_strategy))
     print("Payoffs of players: {}".format(iter_payoff))
+    print("Beliefs of players: {}".format(self.belief_values))
     print("-"*100)
 
   def play_game(self):
     for iter in range(self.iter_count):
       iter_strategy = self.get_strategy(iter==0)
-      self.print_game(iter, iter_strategy)
       self.belief_values = IterativeGame.update_beliefs(iter_strategy, self.player_list, self.actions_list, self.belief_values, self.belief_update_value)
+      self.print_game(iter, iter_strategy)

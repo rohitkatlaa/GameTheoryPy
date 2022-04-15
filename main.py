@@ -2,7 +2,7 @@ from SimpleGame import SimpleGame
 from IterativeGame import IterativeGame
 import numpy as np
 
-def test1():
+def game1():
   """Prisoners' dilemma - a simple game"""
   agents = ["A", "B"]
   actions = [0, 1]
@@ -15,9 +15,10 @@ def test1():
 
 
   game = SimpleGame(agents, actions, payoff_function)
-  assert game.calculate_nash_states() == [(1, 1)]
+  print("The nash equilibrium states are:")
+  print(game.calculate_nash_states())
 
-def test2():
+def game2():
   """A simple game with three actions."""
   agents = ["A", "B"]
   actions = [0, 1, 2]
@@ -35,9 +36,10 @@ def test2():
 
 
   game = SimpleGame(agents, actions, payoff_function)
-  assert game.calculate_nash_states() == [(0, 1), (2, 2)]
+  print("The nash equilibrium states are:")
+  print(game.calculate_nash_states())
 
-def test3():
+def game3():
   """A simple game with three agents."""
   # https://economics.stackexchange.com/questions/34297/pure-nash-equilibria-3-players-game
   
@@ -55,10 +57,11 @@ def test3():
   }
 
   game = SimpleGame(agents, actions, payoff_function)
-  assert game.calculate_nash_states() == [(0, 0, 0), (1, 1, 0)]
+  print("The nash equilibrium states are:")
+  print(game.calculate_nash_states())
 
 
-def test4():
+def game4():
   """Prisoners' dilemma with neutral trust."""
   agents = ["A", "B"]
   actions = [0, 1]
@@ -83,7 +86,7 @@ def test4():
   game.play_game()
 
 
-def test5():
+def game5():
   """Prisoners' dilemma with high trust."""
   agents = ["A", "B"]
   actions = [0, 1]
@@ -104,7 +107,7 @@ def test5():
   game.play_game()
 
 
-def test6():
+def game6():
   """ Stag Hare Hunt with neutral trust"""
   agents = ["A", "B"]
   actions = [0, 1]
@@ -126,7 +129,7 @@ def test6():
   game.play_game()
 
 
-def test7():
+def game7():
   """ Stag Hare Hunt with high trust"""
   agents = ["A", "B"]
   actions = [0, 1]
@@ -148,11 +151,34 @@ def test7():
   game.play_game()
 
 
+def game8():
+  """ Stag Hare Hunt where one guy trusts and other doesn't trust."""
+  agents = ["A", "B"]
+  actions = [0, 1]
+  payoff_function = {
+    (0, 0): [3,3],
+    (0, 1): [0,2],
+    (1, 0): [2,0],
+    (1, 1): [2,2]
+  }
+  belief_values = {
+    "A": np.array([[0.8, 0.2]]),
+    "B": np.array([[0.5, 0.5]])
+  }
+
+  belief_update_value = 0.1
+  iter_count = 10
+
+  game = IterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game.play_game()
+
+
 if __name__ == "__main__":
-  test1()
-  test2()
-  test3()
-  test4()
-  test5()
-  test6()
-  test7()
+  # game1()
+  # game2()
+  # game3()
+  # game4()
+  # game5()
+  # game6()
+  # game7()
+  game8()
