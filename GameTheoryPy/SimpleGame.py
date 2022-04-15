@@ -26,13 +26,13 @@ class SimpleGame:
     # scenario -> list of size n-1, n is the number of players
 
     strategy = scenario.copy()
-    strategy.insert(player_index, 0)
+    strategy.insert(player_index, self.actions_list[0])
     best_response = [tuple(strategy)]
 
     # Find the best response for each such scenario by changing my current action
     for k in range(1, len(self.actions_list)):
       strategy = scenario.copy()
-      strategy.insert(player_index, k)
+      strategy.insert(player_index, self.actions_list[k])
       if(self.payoff_function[tuple(strategy)][player_index] == self.payoff_function[best_response[0]][player_index]):
         best_response.append(tuple(strategy))
       elif (self.payoff_function[tuple(strategy)][player_index] > self.payoff_function[best_response[0]][player_index]):

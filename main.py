@@ -5,12 +5,12 @@ import numpy as np
 def game1():
   """Prisoners' dilemma - a simple game"""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Cooperate", "Defect"]
   payoff_function = {
-    (0, 0): [6,6],
-    (0, 1): [0,10],
-    (1, 0): [10,0],
-    (1, 1): [1,1]
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
   }
 
 
@@ -64,12 +64,12 @@ def game3():
 def game4():
   """Prisoners' dilemma with neutral trust."""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Cooperate", "Defect"]
   payoff_function = {
-    (0, 0): [6,6],
-    (0, 1): [0,10],
-    (1, 0): [10,0],
-    (1, 1): [1,1]
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
   }
   belief_values = {
     "A": np.array([[0.5, 0.5]]),
@@ -110,12 +110,12 @@ def game5():
 def game6():
   """ Stag Hare Hunt with neutral trust"""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Stag", "Hare"]
   payoff_function = {
-    (0, 0): [3,3],
-    (0, 1): [0,2],
-    (1, 0): [2,0],
-    (1, 1): [2,2]
+    ("Stag", "Stag"): [3,3],
+    ("Stag", "Hare"): [0,2],
+    ("Hare", "Stag"): [2,0],
+    ("Hare", "Hare"): [2,2]
   }
   belief_values = {
     "A": np.array([[0.5, 0.5]]),
@@ -132,12 +132,12 @@ def game6():
 def game7():
   """ Stag Hare Hunt with high trust"""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Stag", "Hare"]
   payoff_function = {
-    (0, 0): [3,3],
-    (0, 1): [0,2],
-    (1, 0): [2,0],
-    (1, 1): [2,2]
+    ("Stag", "Stag"): [3,3],
+    ("Stag", "Hare"): [0,2],
+    ("Hare", "Stag"): [2,0],
+    ("Hare", "Hare"): [2,2]
   }
   belief_values = {
     "A": np.array([[0.8, 0.2]]),
@@ -154,12 +154,12 @@ def game7():
 def game8():
   """ Stag Hare Hunt where one guy trusts and other doesn't trust."""
   agents = ["A", "B"]
-  actions = [0, 1]
+  actions = ["Stag", "Hare"]
   payoff_function = {
-    (0, 0): [3,3],
-    (0, 1): [0,2],
-    (1, 0): [2,0],
-    (1, 1): [2,2]
+    ("Stag", "Stag"): [3,3],
+    ("Stag", "Hare"): [0,2],
+    ("Hare", "Stag"): [2,0],
+    ("Hare", "Hare"): [2,2]
   }
   belief_values = {
     "A": np.array([[0.8, 0.2]]),

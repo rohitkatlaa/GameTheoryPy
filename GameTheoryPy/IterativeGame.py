@@ -68,7 +68,7 @@ class IterativeGame:
       for player in self.player_list:
         expected_payoff = expected_payoff_dict[player]
         max_payoff = max(expected_payoff)
-        best_actions = [i for i, j in enumerate(expected_payoff) if j==max_payoff]
+        best_actions = [self.actions_list[i] for i, j in enumerate(expected_payoff) if j==max_payoff]
         action = random.choice(best_actions)
         strategy += (action, )
 
