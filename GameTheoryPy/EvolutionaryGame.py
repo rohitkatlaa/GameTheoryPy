@@ -36,14 +36,14 @@ class AgentSet:
     random.shuffle(agent_list)
     return agent_list
 
-  def get_avg_strategy_payoff(self):
-    avg_strategy_payoff = {}
+  def get_total_strategy_payoff(self):
+    total_strategy_payoff = {}
     for strategy in self.agent_set.keys():
       agent_list = self.agent_set[strategy]
-      total_strategy_payoff = sum([agent.get_avg_payoff() for agent in agent_list])
-      avg_strategy_payoff[strategy] = total_strategy_payoff/len(agent_list)
+      total_payoff = sum([agent.get_avg_payoff() for agent in agent_list])
+      total_strategy_payoff[strategy] = total_payoff
     
-    return avg_strategy_payoff
+    return total_strategy_payoff
 
   def get_agent_distribution(self, avg_strategy_payoff):
     total_payoff = sum(avg_strategy_payoff.values())
@@ -62,7 +62,7 @@ class AgentSet:
     return agent_distribution
 
   def update_generation(self):
-    avg_strategy_payoff = self.get_avg_strategy_payoff()
+    avg_strategy_payoff = self.get_total_strategy_payoff()
 
     agent_distribution = self.get_agent_distribution(avg_strategy_payoff)
 
@@ -76,11 +76,11 @@ class AgentSet:
 
 
   def print_generation_data(self, curr_gen, match_ups_count):
-    avg_strategy_payoff = self.get_avg_strategy_payoff()
+    total_strategy_payoff = self.get_total_strategy_payoff()
     print("-"*100)
     print("Generation {}:".format(curr_gen))
     for strategy in self.agent_set.keys():
-      print("{} has {} number of agents with avg payoff : {}".format(strategy, len(self.agent_set[strategy]), avg_strategy_payoff[strategy]))
+      print("{} has {} number of agents with total payoff : {}".format(strategy, len(self.agent_set[strategy]), total_strategy_payoff[strategy]))
     for match_up in match_ups_count.keys():
       print("Number of matches with {} : {}".format(match_up, sum(match_ups_count[match_up])))
     print("-"*100)

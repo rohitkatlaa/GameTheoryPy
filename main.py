@@ -286,7 +286,7 @@ def IPD_tft_vs_alld_evolutionary_game():
 
   generations_count = 10
   game_count = 10
-  iter_count = 10
+  iter_count = 50
   strategy_function = {
     "tit_for_tat": tit_for_tat,
     "all_d": all_d,
@@ -330,7 +330,7 @@ def IPD_tft_vs_alld_vs_ttft_evolutionary_game():
         return "Defect"
       return "Cooperate"
 
-  generations_count = 10
+  generations_count = 20
   game_count = 10
   iter_count = 10
   strategy_function = {
@@ -364,5 +364,5 @@ if __name__ == "__main__":
   # IPD_tit_vs_alld()
   # IPD_tftt_vs_alld()
   # SHH_tit_vs_allH()
-  IPD_tft_vs_alld_evolutionary_game()
-  # IPD_tft_vs_alld_vs_ttft_evolutionary_game()
+  # IPD_tft_vs_alld_evolutionary_game()
+  IPD_tft_vs_alld_vs_ttft_evolutionary_game()
