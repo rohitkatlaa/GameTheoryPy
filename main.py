@@ -1,6 +1,7 @@
 from typing import Dict, List
 from GameTheoryPy.SimpleGame import SimpleGame
 from GameTheoryPy.IterativeGame import IterativeGame, SimpleIterativeGame
+from GameTheoryPy.EvolutionaryGame import EvolutionaryGame
 import numpy as np
 
 def game1():
@@ -269,6 +270,89 @@ def SHH_tit_vs_allH():
   game.play_game()
 
 
+def IPD_tft_vs_alld_evolutionary_game():
+
+  def tit_for_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) == 0:
+      return "Cooperate"
+    else:
+      opponent_player_list = [i for i in player_list if i != player]
+      return history[opponent_player_list[0]][-1]
+
+  def all_d(player: str, player_list: List, history: Dict[str, List]):
+    return "Defect"
+
+  generations_count = 10
+  game_count = 10
+  iter_count = 10
+  strategy_function = {
+    "tit_for_tat": tit_for_tat,
+    "all_d": all_d,
+  }
+  payoff_function = {
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
+  }
+  agent_distribution = {
+    "tit_for_tat": 10,
+    "all_d": 90,
+  }
+  game = EvolutionaryGame(generations_count, game_count, iter_count, strategy_function, agent_distribution, payoff_function)
+  game.simulate()
+
+
+def IPD_tft_vs_alld_vs_ttft_evolutionary_game():
+
+  def tit_for_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) == 0:
+      return "Cooperate"
+    else:
+      opponent_player_list = [i for i in player_list if i != player]
+      return history[opponent_player_list[0]][-1]
+
+  def all_d(player: str, player_list: List, history: Dict[str, List]):
+    return "Defect"
+
+  def tit_for_two_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) < 2:
+      return "Cooperate"
+    else:
+      opponent_player = [i for i in player_list if i != player][0]
+      if history[opponent_player][-1] == "Defect" and history[opponent_player][-2] == "Defect":
+        return "Defect"
+      return "Cooperate"
+
+  generations_count = 10
+  game_count = 10
+  iter_count = 10
+  strategy_function = {
+    "tit_for_tat": tit_for_tat,
+    "all_d": all_d,
+    "tit_for_two_tat": tit_for_two_tat
+  }
+  payoff_function = {
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
+  }
+  agent_distribution = {
+    "tit_for_tat": 10,
+    "all_d": 80,
+    "tit_for_two_tat": 10
+  }
+  game = EvolutionaryGame(generations_count, game_count, iter_count, strategy_function, agent_distribution, payoff_function)
+  game.simulate()
+
+
 if __name__ == "__main__":
   # game1()
   # game2()
@@ -279,4 +363,6 @@ if __name__ == "__main__":
   # game7()
   # IPD_tit_vs_alld()
   # IPD_tftt_vs_alld()
-  SHH_tit_vs_allH()
+  # SHH_tit_vs_allH()
+  IPD_tft_vs_alld_evolutionary_game()
+  # IPD_tft_vs_alld_vs_ttft_evolutionary_game()
