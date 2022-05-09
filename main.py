@@ -1,5 +1,6 @@
+from typing import Dict, List
 from GameTheoryPy.SimpleGame import SimpleGame
-from GameTheoryPy.IterativeGame import IterativeGame
+from GameTheoryPy.IterativeGame import IterativeGame, SimpleIterativeGame
 import numpy as np
 
 def game1():
@@ -82,7 +83,7 @@ def game4():
   belief_update_value = 0.1
   iter_count = 10
 
-  game = IterativeGame(agents, actions, payoff_function, belief_values, initial_choices_prob, belief_update_value, iter_count)
+  game = SimpleIterativeGame(agents, actions, payoff_function, belief_values, initial_choices_prob, belief_update_value, iter_count)
   game.play_game()
 
 
@@ -103,7 +104,7 @@ def game5():
   belief_update_value = 0.1
   iter_count = 10
 
-  game = IterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game = SimpleIterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
   game.play_game()
 
 
@@ -125,7 +126,7 @@ def game6():
   belief_update_value = 0.1
   iter_count = 10
 
-  game = IterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game = SimpleIterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
   game.play_game()
 
 
@@ -147,7 +148,7 @@ def game7():
   belief_update_value = 0.1
   iter_count = 10
 
-  game = IterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game = SimpleIterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
   game.play_game()
 
 
@@ -169,7 +170,102 @@ def game8():
   belief_update_value = 0.1
   iter_count = 10
 
-  game = IterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game = SimpleIterativeGame(agents, actions, payoff_function, belief_values, None, belief_update_value, iter_count)
+  game.play_game()
+
+
+def IPD_tit_vs_alld():
+  """This is a Iterated Prisoners' Dilemma game between TIT FOR TAT and ALL D strategy."""
+  def tit_for_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) == 0:
+      return "Cooperate"
+    else:
+      opponent_player_list = [i for i in player_list if i != player]
+      return history[opponent_player_list[0]][-1]
+
+  def all_d(player: str, player_list: List, history: Dict[str, List]):
+    return "Defect"
+
+  agents = ["A", "B"]
+  actions = ["Cooperate", "Defect"]
+  payoff_function = {
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
+  }
+  iter_count = 10
+  strategy_function = {
+    "A": tit_for_tat,
+    "B": all_d,
+  }
+  game = IterativeGame(agents, actions, payoff_function, strategy_function, iter_count)
+  game.play_game()
+
+
+def IPD_tftt_vs_alld():
+  """This is a Iterated Prisoners' Dilemma game between TIT FOR TAT and ALL D strategy."""
+  def tit_for_two_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) < 2:
+      return "Cooperate"
+    else:
+      opponent_player = [i for i in player_list if i != player][0]
+      if history[opponent_player][-1] == "Defect" and history[opponent_player][-2] == "Defect":
+        return "Defect"
+      return "Cooperate"
+
+  def all_d(player: str, player_list: List, history: Dict[str, List]):
+    return "Defect"
+
+  agents = ["A", "B"]
+  actions = ["Cooperate", "Defect"]
+  payoff_function = {
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
+  }
+  iter_count = 10
+  strategy_function = {
+    "A": tit_for_two_tat,
+    "B": all_d,
+  }
+  game = IterativeGame(agents, actions, payoff_function, strategy_function, iter_count)
+  game.play_game()
+
+
+def SHH_tit_vs_allH():
+  """This is a Iterated Prisoners' Dilemma game between TIT FOR TAT and ALL D strategy."""
+  def tit_for_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) == 0:
+      return "Stag"
+    else:
+      opponent_player_list = [i for i in player_list if i != player]
+      return history[opponent_player_list[0]][-1]
+
+  def all_H(player: str, player_list: List, history: Dict[str, List]):
+    return "Hare"
+
+  agents = ["A", "B"]
+  actions = ["Stag", "Hare"]
+  payoff_function = {
+    ("Stag", "Stag"): [3,3],
+    ("Stag", "Hare"): [0,2],
+    ("Hare", "Stag"): [2,0],
+    ("Hare", "Hare"): [2,2]
+  }
+  iter_count = 10
+  strategy_function = {
+    "A": tit_for_tat,
+    "B": all_H,
+  }
+  game = IterativeGame(agents, actions, payoff_function, strategy_function, iter_count)
   game.play_game()
 
 
@@ -181,4 +277,6 @@ if __name__ == "__main__":
   # game5()
   # game6()
   # game7()
-  game8()
+  # IPD_tit_vs_alld()
+  # IPD_tftt_vs_alld()
+  SHH_tit_vs_allH()

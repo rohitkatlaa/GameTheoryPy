@@ -1,9 +1,9 @@
 import random
 import numpy as np
-from typing import Dict, List, Tuple
+from typing import Callable, Dict, List, Tuple
 
 
-class IterativeGame:
+class SimpleIterativeGame:
 
   def __init__(self, player_list: List, actions_list: List, payoff_function: Dict[Tuple, List[float]], belief_values: Dict[str, np.array], initial_choices_prob: Dict[str, List[float]], belief_update_value: float, iter_count: int):
     self.player_list = player_list
@@ -13,7 +13,7 @@ class IterativeGame:
     self.belief_update_value = belief_update_value
     self.initial_choices_prob = initial_choices_prob
     self.iter_count = iter_count
-    IterativeGame.validate(self.player_list, self.actions_list, self.payoff_function, self.belief_values, self.initial_choices_prob)
+    SimpleIterativeGame.validate(self.player_list, self.actions_list, self.payoff_function, self.belief_values, self.initial_choices_prob)
 
   @staticmethod
   def validate(player_list: List, actions_list: List, payoff_function: Dict[Tuple, List[float]], belief_values: Dict[str, np.array], initial_choices_prob: Dict[str, List[float]]):
@@ -105,5 +105,63 @@ class IterativeGame:
   def play_game(self):
     for iter in range(self.iter_count):
       iter_strategy = self.get_strategy(iter==0)
-      self.belief_values = IterativeGame.update_beliefs(iter_strategy, self.player_list, self.actions_list, self.belief_values, self.belief_update_value)
+      self.belief_values = SimpleIterativeGame.update_beliefs(iter_strategy, self.player_list, self.actions_list, self.belief_values, self.belief_update_value)
       self.print_game(iter, iter_strategy)
+
+
+class IterativeGame:
+
+  def __init__(self, player_list: List, actions_list: List, payoff_function: Dict[Tuple, List[float]], strategy_function: Dict[str, Callable], iter_count: int):
+    IterativeGame.validate(player_list, actions_list, payoff_function, strategy_function)
+    self.player_list = player_list
+    self.actions_list = actions_list
+    self.payoff_function = payoff_function
+    self.strategy_function = strategy_function
+    self.iter_count = iter_count
+
+  @staticmethod
+  def validate(player_list: List, actions_list: List, payoff_function: Dict[Tuple, List[float]], strategy_function: Dict[str, Callable]):
+    n = len(player_list)
+    a = len(actions_list)
+    assert len(payoff_function) == a**n
+    for payoff in payoff_function.keys():
+      for action in payoff:
+        assert action in actions_list
+      assert len(payoff) == n
+      assert len(payoff_function[payoff]) == n
+    assert len(strategy_function) == n
+    for strategy in strategy_function.keys():
+      assert strategy in player_list
+
+  def print_iter(self, iter, game_action, players_total_payoff):
+    iter_payoff = self.payoff_function[game_action]
+    print("-"*100)
+    print("Iteration {}:".format(iter))
+    print("Actions of players: {}".format(game_action))
+    print("Payoffs of players: {}".format(iter_payoff))
+    print("Total playoff of players: {}".format(players_total_payoff))
+    print("-"*100)
+  
+  def play_game(self):
+    history = {}
+    players_payoff = {}
+    players_total_payoff = []
+    for player in self.player_list:
+      history[player] = []
+      players_payoff[player] = []
+      players_total_payoff.append(0)
+
+    for iter in range(self.iter_count):
+      game_action = ()
+      for player in self.player_list:
+        action = self.strategy_function[player](player, self.player_list, history)
+        game_action += (action, )
+
+      for player_num in range(len(self.player_list)):
+        history[self.player_list[player_num]].append(game_action[player_num])
+        players_payoff[self.player_list[player_num]].append(self.payoff_function[game_action][player_num])
+        players_total_payoff[player_num] += self.payoff_function[game_action][player_num]
+      
+      self.print_iter(iter, game_action, players_total_payoff)
+
+    
