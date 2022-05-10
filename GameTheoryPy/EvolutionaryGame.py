@@ -81,8 +81,8 @@ class AgentSet:
     print("Generation {}:".format(curr_gen))
     for strategy in self.agent_set.keys():
       print("{} has {} number of agents with total payoff : {}".format(strategy, len(self.agent_set[strategy]), total_strategy_payoff[strategy]))
-    for match_up in match_ups_count.keys():
-      print("Number of matches with {} : {}".format(match_up, sum(match_ups_count[match_up])))
+    # for match_up in match_ups_count.keys():
+    #   print("Number of matches with {} : {}".format(match_up, sum(match_ups_count[match_up])))
     print("-"*100)
 
 

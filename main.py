@@ -1,3 +1,4 @@
+import random
 from typing import Dict, List
 from GameTheoryPy.SimpleGame import SimpleGame
 from GameTheoryPy.IterativeGame import IterativeGame, SimpleIterativeGame
@@ -352,6 +353,52 @@ def IPD_tft_vs_alld_vs_ttft_evolutionary_game():
   game = EvolutionaryGame(generations_count, game_count, iter_count, strategy_function, agent_distribution, payoff_function)
   game.simulate()
 
+def IPD_bounded_tft_vs_ttft_evolutionary_game():
+  def bounded_tft(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) == 0:
+      return "Cooperate"
+    else:
+      val = random.randint(0, 100)
+      if val > 10:
+        opponent_player_list = [i for i in player_list if i != player]
+        return history[opponent_player_list[0]][-1]
+      else:
+        return "Defect"
+
+  def tit_for_two_tat(player: str, player_list: List, history: Dict[str, List]):
+    assert len(history.keys()) == 2
+    
+    if len(history[player]) < 2:
+      return "Cooperate"
+    else:
+      opponent_player = [i for i in player_list if i != player][0]
+      if history[opponent_player][-1] == "Defect" and history[opponent_player][-2] == "Defect":
+        return "Defect"
+      return "Cooperate"
+
+  generations_count = 30
+  game_count = 20
+  iter_count = 200
+  strategy_function = {
+    "bounded_tft": bounded_tft,
+    "tit_for_two_tat": tit_for_two_tat
+  }
+  payoff_function = {
+    ("Cooperate", "Cooperate"): [6,6],
+    ("Cooperate", "Defect"): [0,10],
+    ("Defect", "Cooperate"): [10,0],
+    ("Defect", "Defect"): [1,1]
+  }
+  agent_distribution = {
+    "bounded_tft": 50,
+    "tit_for_two_tat": 50
+  }
+  game = EvolutionaryGame(generations_count, game_count, iter_count, strategy_function, agent_distribution, payoff_function)
+  game.simulate()
+
+
 
 if __name__ == "__main__":
   # game1()
@@ -365,4 +412,5 @@ if __name__ == "__main__":
   # IPD_tftt_vs_alld()
   # SHH_tit_vs_allH()
   # IPD_tft_vs_alld_evolutionary_game()
-  IPD_tft_vs_alld_vs_ttft_evolutionary_game()
+  # IPD_tft_vs_alld_vs_ttft_evolutionary_game()
+  IPD_bounded_tft_vs_ttft_evolutionary_game()
